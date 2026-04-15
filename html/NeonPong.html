@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pong Game</title>
+    <style>
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        color: white;
+    }
+
+    /* HEADER */
+    header {
+    background: rgba(0,0,0,0.4);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    padding: 15px 40px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 900px;
+    margin: auto;
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+nav a {
+    margin-left: 20px;
+    text-decoration: none;
+    color: #00eaff;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+nav a:hover {
+    color: #ffffff;
+    text-shadow: 0 0 8px #00eaff;
+}
+    header {
+        text-align: center;
+        padding: 20px 0;
+        font-size: 28px;
+        font-weight: bold;
+        letter-spacing: 2px;
+        background: rgba(0,0,0,0.4);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+
+    #pong-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 0;
+    }
+
+    #score {
+        font-size: 26px;
+        margin-bottom: 12px;
+        letter-spacing: 6px;
+        text-shadow: 0 0 10px #00eaff;
+    }
+
+    #pong-canvas {
+        background: #000;
+        border-radius: 12px;
+        box-shadow: 0 0 25px rgba(0, 234, 255, 0.5);
+    }
+
+    #msg {
+        font-size: 14px;
+        color: #ccc;
+        margin-top: 12px;
+    }
+
+    #start-btn {
+        margin-top: 12px;
+        padding: 10px 28px;
+        font-size: 14px;
+        cursor: pointer;
+        border-radius: 10px;
+        border: none;
+        background: linear-gradient(45deg, #00eaff, #0077ff);
+        color: white;
+        transition: 0.3s;
+        box-shadow: 0 0 10px rgba(0,234,255,0.7);
+    }
+
+    #start-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(0,234,255,1);
+    }
+
+    #difficulty {
+        margin-top: 8px;
+        font-size: 13px;
+        color: #ccc;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+    }
+
+    #difficulty select {
+        padding: 4px 8px;
+        border-radius: 6px;
+        border: none;
+        background: #111;
+        color: white;
+    }
+</style>
+</head>
+<body>
+    <header>
+    <div class="header-content">
+        <div class="logo">🏓 Neon Pong Arena</div>
+        <nav>
+            <a href="index.html">Resume</a>
+            <a href="golf.html">Golf Page</a>
+        </nav>
+    </div>
+</header>
+    <div id="pong-wrap">
+        <div id="score">0 — 0</div>
+        <canvas id="pong-canvas" width="600" height="380"></canvas>
+        <div id="msg">Press Start to play &nbsp;|&nbsp; W/S or ↑/↓ to move</div>
+        <div id="difficulty">
+            <span>Difficulty:</span>
+            <select id="diff-select">
+                <option value="easy">Easy</option>
+                <option value="medium" selected>Medium</option>
+                <option value="hard">Hard</option>
+            </select>
+        </div>
+        <button id="start-btn">Start Game</button>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('pong-canvas');
+        const ctx = canvas.getContext('2d');
+        const scoreEl = document.getElementById('score');
+        const msgEl = document.getElementById('msg');
+        const startBtn = document.getElementById('start-btn');
+        const diffSel = document.getElementById('diff-select');
+
+        const W = canvas.width, H = canvas.height;
+        const PADDLE_W = 12, PADDLE_H = 80, BALL_SIZE = 10;
+        const WIN_SCORE = 7;
+
+        let state = 'idle';
+        let animId;
+        let keys = {};
+        let playerScore = 0, aiScore = 0;
+        let playerY, aiY, ball, aiSpeed;
+
+        function diffSettings() {
+            const d = diffSel.value;
+            if (d === 'easy') return { aiSpeed: 2.8, ballSpeed: 4 };
+            if (d === 'hard') return { aiSpeed: 5.5, ballSpeed: 7 };
+            return { aiSpeed: 3.8, ballSpeed: 5.5 };
+        }
+
+        function initRound() {
+            const { ballSpeed } = diffSettings();
+            playerY = H / 2 - PADDLE_H / 2;
+            aiY = H / 2 - PADDLE_H / 2;
+            const angle = (Math.random() * 60 - 30) * Math.PI / 180;
+            const dir = Math.random() < 0.5 ? 1 : -1;
+            ball = { x: W / 2, y: H / 2, vx: ballSpeed * dir * Math.cos(angle), vy: ballSpeed * Math.sin(angle) };
+            aiSpeed = diffSettings().aiSpeed;
+        }
+
+        function resetGame() {
+            playerScore = 0; aiScore = 0;
+            updateScore();
+            initRound();
+        }
+
+        function updateScore() {
+            scoreEl.textContent = `${playerScore} — ${aiScore}`;
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, W, H);
+            ctx.fillStyle = '#111';
+            ctx.fillRect(0, 0, W, H);
+            ctx.setLineDash([8, 10]);
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(W / 2, 0);
+            ctx.lineTo(W / 2, H);
+            ctx.stroke();
+            ctx.setLineDash([]);
+            ctx.fillStyle = '#fff';
+            ctx.beginPath();
+            ctx.roundRect(20, playerY, PADDLE_W, PADDLE_H, 4);
+            ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.beginPath();
+            ctx.roundRect(W - 20 - PADDLE_W, aiY, PADDLE_W, PADDLE_H, 4);
+            ctx.fill();
+            ctx.fillStyle = '#fff';
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, BALL_SIZE / 2, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function update() {
+            if (keys['w'] || keys['arrowup']) playerY = Math.max(0, playerY - 6);
+            if (keys['s'] || keys['arrowdown']) playerY = Math.min(H - PADDLE_H, playerY + 6);
+            const aiCenter = aiY + PADDLE_H / 2;
+            if (ball.y < aiCenter - 8) aiY = Math.max(0, aiY - aiSpeed);
+            else if (ball.y > aiCenter + 8) aiY = Math.min(H - PADDLE_H, aiY + aiSpeed);
+            ball.x += ball.vx;
+            ball.y += ball.vy;
+            if (ball.y - BALL_SIZE / 2 <= 0) { ball.y = BALL_SIZE / 2; ball.vy = Math.abs(ball.vy); }
+            if (ball.y + BALL_SIZE / 2 >= H) { ball.y = H - BALL_SIZE / 2; ball.vy = -Math.abs(ball.vy); }
+            const playerRight = 20 + PADDLE_W;
+            if (ball.x - BALL_SIZE / 2 <= playerRight && ball.x - BALL_SIZE / 2 >= 20 && ball.y >= playerY && ball.y <= playerY + PADDLE_H && ball.vx < 0) {
+                ball.x = playerRight + BALL_SIZE / 2;
+                const hitPos = (ball.y - playerY) / PADDLE_H - 0.5;
+                const speed = Math.sqrt(ball.vx ** 2 + ball.vy ** 2) * 1.05;
+                const angle = hitPos * 60 * Math.PI / 180;
+                ball.vx = Math.abs(speed * Math.cos(angle));
+                ball.vy = speed * Math.sin(angle);
+            }
+            const aiLeft = W - 20 - PADDLE_W;
+            if (ball.x + BALL_SIZE / 2 >= aiLeft && ball.x + BALL_SIZE / 2 <= W - 20 && ball.y >= aiY && ball.y <= aiY + PADDLE_H && ball.vx > 0) {
+                ball.x = aiLeft - BALL_SIZE / 2;
+                const hitPos = (ball.y - aiY) / PADDLE_H - 0.5;
+                const speed = Math.sqrt(ball.vx ** 2 + ball.vy ** 2) * 1.05;
+                const angle = hitPos * 60 * Math.PI / 180;
+                ball.vx = -Math.abs(speed * Math.cos(angle));
+                ball.vy = speed * Math.sin(angle);
+            }
+            if (ball.x < 0) {
+                aiScore++;
+                updateScore();
+                if (aiScore >= WIN_SCORE) { endGame('AI wins! 🤖'); return; }
+                initRound();
+            }
+            if (ball.x > W) {
+                playerScore++;
+                updateScore();
+                if (playerScore >= WIN_SCORE) { endGame('You win! 🏆'); return; }
+                initRound();
+            }
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            animId = requestAnimationFrame(gameLoop);
+        }
+
+        function endGame(msg) {
+            cancelAnimationFrame(animId);
+            state = 'idle';
+            draw();
+            ctx.fillStyle = 'rgba(0,0,0,0.6)';
+            ctx.fillRect(0, 0, W, H);
+            ctx.fillStyle = '#fff';
+            ctx.font = 'bold 32px monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText(msg, W / 2, H / 2 - 10);
+            ctx.font = '16px monospace';
+            ctx.fillText('Press Start to play again', W / 2, H / 2 + 30);
+            startBtn.textContent = 'Play Again';
+            msgEl.textContent = 'First to 7 wins!';
+        }
+
+        startBtn.addEventListener('click', () => {
+            if (state === 'playing') return;
+            state = 'playing';
+            cancelAnimationFrame(animId);
+            resetGame();
+            startBtn.textContent = 'Restart';
+            msgEl.textContent = 'W/S or ↑/↓ to move your paddle';
+            gameLoop();
+        });
+
+        document.addEventListener('keydown', e => {
+            keys[e.key.toLowerCase()] = true;
+            if (['arrowup', 'arrowdown', ' '].includes(e.key.toLowerCase())) e.preventDefault();
+        });
+        document.addEventListener('keyup', e => { keys[e.key.toLowerCase()] = false; });
+
+        draw();
+        ctx.fillStyle = 'rgba(0,0,0,0.5)';
+        ctx.fillRect(0, 0, W, H);
+        ctx.fillStyle = '#fff';
+        ctx.font = '20px monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('PONG', W / 2, H / 2 - 10);
+        ctx.font = '14px monospace';
+        ctx.fillText('Press Start to begin', W / 2, H / 2 + 20);
+    </script>
+</body>
+</html>

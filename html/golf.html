@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Art of Golf</title>
+  <link rel="stylesheet" href="../golf.css" />
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="site-nav">
+    <span class="nav-logo">⛳ The Art of Golf</span>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="index.html">Résumé</a>
+      <a href="NeonPong.html">Play Neon Pong</a>
+      <a href="#top">Back to Top</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero" id="top">
+    <div class="hero-content">
+      <h1>The Art of Golf</h1>
+      <p class="hero-sub">A deep dive into the world's most maddening, rewarding sport.</p>
+      <a href="#why-golf" class="btn-anchor">Explore ↓</a>
+    </div>
+  </header>
+
+  <!-- WHY GOLF SECTION -->
+  <div class="section" id="why-golf">
+    <div class="section-inner">
+      <h2>Why Golf?</h2>
+      <p>
+        Golf is unlike any other sport. You compete against the course, against yourself, and against
+        every decision you've made from the first tee to the final green. It blends precision,
+        patience, athleticism, and strategy into an experience that keeps players coming back for
+        a lifetime.
+      </p>
+      <img
+        src="../Images/augusta-national-12.jpg"
+        alt="Augusta National Golf Club hole 12"
+        class="content-image"
+      />
+      <p class="caption">Hole 12 at Augusta National — one of the most iconic par-3s in golf history.</p>
+    </div>
+  </div>
+
+  <!-- ANCHOR LINK TARGET: THE MAJORS -->
+  <div class="section alt-section" id="majors">
+    <div class="section-inner">
+      <h2>The Four Majors</h2>
+      <p>
+        Every golfer dreams of winning a Major. These four tournaments represent the pinnacle of the
+        sport and are played annually at some of the most storied venues in the world.
+      </p>
+
+      <!-- ORDERED LIST with embedded UNORDERED LIST -->
+      <ol class="majors-list">
+        <li>
+          <strong>The Masters</strong> — Augusta National, Georgia (April)
+          <ul>
+            <li>Only Major played at the same course every year</li>
+            <li>Winner receives the iconic green jacket</li>
+            <li>Par 72, 7,510 yards</li>
+          </ul>
+        </li>
+        <li>
+          <strong>The U.S. Open</strong> — Rotates among elite U.S. courses (June)
+          <ul>
+            <li>Known for its brutal rough and narrow fairways</li>
+            <li>Tests precision above all else</li>
+            <li>Hosted at Pinehurst, Pebble Beach, Oakmont, and more</li>
+          </ul>
+        </li>
+        <li>
+          <strong>The Open Championship</strong> — Links courses in the UK (July)
+          <ul>
+            <li>The oldest Major, first played in 1860</li>
+            <li>Links-style golf with wind as a major factor</li>
+            <li>St Andrews is the spiritual home</li>
+          </ul>
+        </li>
+        <li>
+          <strong>The PGA Championship</strong> — Rotates among private U.S. clubs (May)
+          <ul>
+            <li>Often features the deepest field of any Major</li>
+            <li>Open to PGA professionals, not just tour members</li>
+            <li>Winner earns a lifetime PGA Tour exemption</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- ON-PAGE ANCHOR NAV -->
+  <div class="anchor-nav">
+    <p>Jump to a section:</p>
+    <a href="#why-golf">Why Golf?</a>
+    <a href="#majors">The Majors</a>
+    <a href="#technique">Technique</a>
+    <a href="#data-viz">Stats & Data</a>
+    <a href="#video">Watch &amp; Learn</a>
+  </div>
+
+  <!-- TECHNIQUE SECTION -->
+  <div class="section" id="technique">
+    <div class="section-inner">
+      <h2>Breaking Down the Swing</h2>
+      <p>
+        The golf swing is one of the most technically demanding motions in sport. It takes years to
+        develop a repeatable, consistent swing — and even the pros are always tweaking theirs.
+      </p>
+      <div class="card-grid">
+        <div class="card">
+          <h3>The Setup</h3>
+          <p>Posture, grip, and alignment are the foundation. Poor setup leads to compensations throughout the swing.</p>
+        </div>
+        <div class="card">
+          <h3>The Backswing</h3>
+          <p>Rotate the shoulders fully while keeping the lower body stable. The club should reach parallel at the top.</p>
+        </div>
+        <div class="card">
+          <h3>The Downswing</h3>
+          <p>Initiate with the hips, not the arms. The sequence: hips → torso → arms → club. This generates power.</p>
+        </div>
+        <div class="card">
+          <h3>Impact &amp; Follow-Through</h3>
+          <p>Strike down on the ball with irons. Weight transfers fully to the lead foot through a balanced finish.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLEAU EMBED -->
+  <div class="section alt-section" id="data-viz">
+    <div class="section-inner">
+      <h2>Golf Stats &amp; Data Visualization</h2>
+      <p>Explore PGA Tour strokes gained statistics — an interactive Tableau visualization showing how the best players in the world separate themselves from the field.</p>
+      <div class="tableau-wrapper">
+        <div class='tableauPlaceholder' id='viz1' style='position: relative'>
+          <noscript>
+            <a href='https://public.tableau.com/views/PGATourStrokesGained/Dashboard1'>
+              <img alt='PGA Tour Strokes Gained' src='https://public.tableau.com/static/images/PG/PGATourStrokesGained/Dashboard1/1_rss.png' style='border: none' />
+            </a>
+          </noscript>
+          <object class='tableauViz' style='display:none;'>
+            <param name='host_url' value='https%3A%2F%2Fpublic.tableau.com%2F' />
+            <param name='embed_code_version' value='3' />
+            <param name='site_root' value='' />
+            <param name='name' value='PGATourStrokesGained&#47;Dashboard1' />
+            <param name='tabs' value='no' />
+            <param name='toolbar' value='yes' />
+            <param name='animate_transition' value='yes' />
+            <param name='display_static_image' value='yes' />
+            <param name='display_spinner' value='yes' />
+            <param name='display_overlay' value='yes' />
+            <param name='display_count' value='yes' />
+            <param name='language' value='en-US' />
+          </object>
+        </div>
+        <script type='text/javascript'>
+          var divElement = document.getElementById('viz1');
+          var vizElement = divElement.getElementsByTagName('object')[0];
+          vizElement.style.width='100%';
+          vizElement.style.height='600px';
+          var scriptElement = document.createElement('script');
+          scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';
+          vizElement.parentNode.insertBefore(scriptElement, vizElement);
+        </script>
+      </div>
+      <p class="caption">Source: Tableau Public — PGA Tour Strokes Gained data.</p>
+    </div>
+  </div>
+
+  <!-- YOUTUBE VIDEO -->
+  <div class="section" id="video">
+    <div class="section-inner">
+      <h2>Watch &amp; Learn: The Perfect Golf Swing</h2>
+      <p>
+        Watching great ball-strikers in slow motion is one of the best ways to understand what a
+        technically sound golf swing actually looks like. Here's a breakdown of the fundamentals:
+      </p>
+      <div class="video-wrapper">
+        <iframe
+          src="https://www.youtube.com/embed/wd7a9SLgJlQ"
+          title="How to Swing a Golf Club (The EASY way)"
+          allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="site-footer">
+    <p>Made from scratch — HTML &amp; CSS, no frameworks.</p>
+    <p><a href="index.html">← Back to Professional Site</a></p>
+  </footer>
+
+</body>
+</html>
